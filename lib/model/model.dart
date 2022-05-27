@@ -3,8 +3,9 @@ class YouTubeModel {
   String? caption;
   String? url;
   String? image;
-
-  YouTubeModel({required this.id, required this.caption, required this.url, required this.image});
+   String? views;
+   String? channelName;
+  YouTubeModel({required this.id, required this.caption, required this.url, required this.image,required this.views,this.channelName});
 
 
  YouTubeModel.fromJson(Map <String,dynamic> json)
@@ -13,6 +14,8 @@ class YouTubeModel {
   image = json["image"];
   url = json["url"];
   caption = json["caption"];
+  views = json["views"];
+  channelName = json["channelName"];
 
 }
 }

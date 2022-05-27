@@ -19,66 +19,148 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: header(context),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-              backgroundColor: Colors.blueAccent),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.play_circle),
-            label: 'Play',
-          ),
-        ],
-        type: BottomNavigationBarType.shifting,
-        backgroundColor: Colors.white38,
-      ),
-      body: FutureBuilder(
-        future: jsonData(),
-        builder: (context, data) {
-          if (data.hasError) {
-            return Text("${data.error}");
-          } else if (data.hasData) {
-            var items = data.data as List<YouTubeModel>;
-            return ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) => Container(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SingleChildScrollView(
-                            child: GestureDetector(
+      bottomNavigationBar: buildBottomNavigationBar(),
+      body: buildFutureBuilder(),
+    );
+  }
+
+  FutureBuilder<List<YouTubeModel>> buildFutureBuilder() {
+    return FutureBuilder(
+      future: jsonData(),
+      builder: (context, data) {
+        if (data.hasError) {
+          return Text("${data.error}");
+        } else if (data.hasData) {
+          var items = data.data as List<YouTubeModel>;
+          return ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) => Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SingleChildScrollView(
+                        child: Container(
+                          margin: EdgeInsets.all(8.0),
+                          child: Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8.0))),
+                            child: InkWell(
                               onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => VideoApp(),
-                                ),
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VideoApp(asset: items[index].url.toString(),))),
+                              child: Column(
+                                crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                                  ClipRRect(
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(8.0),
+                                      topRight: Radius.circular(8.0),
+                                    ),
+                                    child: Image.asset(
+                                        items[index].image.toString(),
+                                        // width: 300,
+                                        height: 150,
+                                        fit: BoxFit.fill),
+                                  ),
+                                  ListTile(
+                                    title:
+                                        Text(items[index].caption.toString()),
+                                    subtitle: Row(
+                                      children: [
+                                        Text("${items[index].views}k views"),
+                                        SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text("1 week ago")
+                                      ],
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                                onPressed: () {
+                                                  print(
+                                                      "View channel details");
+                                                },
+                                                icon: const Icon(Icons.face)),
+                                            Text(items[index]
+                                                .channelName
+                                                .toString())
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: ElevatedButton(
+                                          onPressed: () {},
+                                          child: Text("Subscribe"),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
                               ),
-                              child: Container(
-                                  margin: EdgeInsets.all(40),
-                                  child: Center(
-                                      child: Column(
-                                        children: [
-                                          Image.asset(
-                                              items[index].image.toString()),
-                                          SizedBox(height: 10,),
-                                          Text(items[index].caption.toString(),style: TextStyle(fontSize: 20,fontWeight: FontWeight.w700),)
-                                        ],
-                                      ))),
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ));
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+                    ],
+                  ));
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
+  }
+
+  BottomNavigationBar buildBottomNavigationBar() {
+
+    int selected = 0;
+
+    void _onTapped(int index) {
+      setState(() {
+        selected = index;
+      });
+     // Navigator.push(context, route)
+    }
+    return BottomNavigationBar(
+      selectedItemColor: Colors.red,
+      currentIndex: selected,
+      onTap: _onTapped,
+      items: const [
+        BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+            ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.local_fire_department,color: Colors.black54,),
+          label: 'Play',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.play_circle,color: Colors.black54,),
+          label: 'Play',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.folder,color: Colors.black54,),
+          label: 'Play',
+        ),
+      ],
+      type: BottomNavigationBarType.shifting,
+    );
+
+
   }
 
   AppBar header(BuildContext context) {
@@ -112,6 +194,8 @@ class _HomePageState extends State<HomePage> {
 
     return list.map((e) => YouTubeModel.fromJson(e)).toList();
   }
+
+
 }
 
 class MySearchDelegate extends SearchDelegate {
@@ -141,7 +225,7 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return VideoApp();
+    return VideoApp(asset: 'assets/video.mp4',);
   }
 
   @override

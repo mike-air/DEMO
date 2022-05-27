@@ -1,10 +1,11 @@
 import 'package:video_player/video_player.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(VideoApp());
+void main() => runApp(const VideoApp(asset: 'assets/video.mp4',));
 
 class VideoApp extends StatefulWidget {
-  const VideoApp({Key? key}) : super(key: key);
+  final String asset;
+  const VideoApp({Key? key, required this.asset}) : super(key: key);
 
   @override
   _VideoAppState createState() => _VideoAppState();
@@ -16,7 +17,7 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset('assets/video.mp4')
+    _controller = VideoPlayerController.asset(widget.asset)
       ..addListener(() => setState(() {}))
       ..setLooping(true)
       ..initialize().then((value) => _controller.play());
@@ -43,13 +44,7 @@ class VideoPlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return controller != null
         ? Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                color: Colors.black38,
-                onPressed: () => Navigator.pop(context),
-              ),
-            ),
+            appBar: buildAppBar(context),
             body: Container(
               alignment: Alignment.topCenter,
               child: buildVideo(),
@@ -60,11 +55,21 @@ class VideoPlayerWidget extends StatelessWidget {
           );
   }
 
+  AppBar buildAppBar(BuildContext context) {
+    return AppBar(
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back),
+              color: Colors.black38,
+              onPressed: () => Navigator.pop(context),
+            ),
+          );
+  }
+
   Widget buildVideo() => buildVideoPlayer();
 
   buildVideoPlayer() {
-    return Container(
-        margin: EdgeInsets.symmetric(horizontal: 5),
+    return AspectRatio(
+      aspectRatio: controller.value.aspectRatio,
         child: VideoPlayer(controller));
   }
 }
