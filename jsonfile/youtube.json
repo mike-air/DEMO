@@ -2,7 +2,7 @@
   {
   "id":"1",
     "image": "assets/images/avengers.jpg",
-    "url": "assets/video2.mp4",
+    "url": "videos/video2.mp4",
     "caption": "AVENGERS ENDGAME ",
     "views": "228",
     "channelName": "race"
@@ -10,7 +10,7 @@
   {
     "id": "2",
     "image": "assets/images/Scoobydoo.jpeg",
-    "url": "assets/video2.mp4",
+    "url": "videos/video4.mp4",
     "caption": "Scooby doo",
     "views": "228",
     "channelName": "sport"
@@ -19,7 +19,7 @@
   {
     "id": "2",
     "image": "assets/images/car.jpg",
-    "url": "assets/video2.mp4",
+    "url": "videos/video2.mp4",
     "caption": "Sport Car",
     "views": "228",
     "channelName": "movies"
@@ -28,7 +28,7 @@
   {
     "id": "2",
     "image": "assets/images/Scoobydoo.jpeg",
-    "url": "assets/vide3.mp4",
+    "url": "videos/video3.mp4",
     "caption": "Scooby doo",
     "views": "228",
     "channelName": "Games"

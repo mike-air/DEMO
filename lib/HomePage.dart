@@ -46,12 +46,14 @@ class _HomePageState extends State<HomePage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8.0))),
                             child: InkWell(
-                              onTap: () => Navigator.push(
+                              onTap: () => {
+                                Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => VideoApp(
-                                            asset: items[index].url.toString(),
-                                          ))),
+                                    builder: (context) => VideoDetails(title: items[index].channelName.toString(),)
+                                  ),
+                                ),
+                              },
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
@@ -122,10 +124,10 @@ class _HomePageState extends State<HomePage> {
                                         ],
                                       ),
                                       Padding(
-                                        padding: EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(8.0),
                                         child: ElevatedButton(
                                           onPressed: () {},
-                                          child: Text("Subscribe"),
+                                          child: const Text("Subscribe"),
                                         ),
                                       ),
                                     ],
@@ -204,14 +206,18 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
       ),
-      actions:  [
+      actions: [
         Padding(
-          padding: EdgeInsets.all(8.0),
-          child: CircleAvatar(
-            child: ClipOval(
-                child: Image.asset("assets/images/Scoobydoo.jpeg",fit: BoxFit.cover,height: 100,width: 100,)),
-          )
-        )
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              child: ClipOval(
+                  child: Image.asset(
+                "assets/images/Scoobydoo.jpeg",
+                fit: BoxFit.cover,
+                height: 100,
+                width: 100,
+              )),
+            ))
       ],
     );
   }
@@ -252,9 +258,7 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return const VideoApp(
-      asset: 'assets/video.mp4',
-    );
+    return const VideoDetails(title: 'DEMO',);
   }
 
   @override
