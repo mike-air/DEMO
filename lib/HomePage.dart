@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       SingleChildScrollView(
                         child: Container(
-                          margin: EdgeInsets.all(8.0),
+                          margin: const EdgeInsets.all(8.0),
                           child: Card(
                             shape: const RoundedRectangleBorder(
                                 borderRadius:
@@ -49,10 +49,11 @@ class _HomePageState extends State<HomePage> {
                               onTap: () => Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => VideoApp(asset: items[index].url.toString(),))),
+                                      builder: (context) => VideoApp(
+                                            asset: items[index].url.toString(),
+                                          ))),
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.stretch,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: <Widget>[
                                   ClipRRect(
                                     borderRadius: const BorderRadius.only(
@@ -66,15 +67,29 @@ class _HomePageState extends State<HomePage> {
                                         fit: BoxFit.fill),
                                   ),
                                   ListTile(
-                                    title:
-                                        Text(items[index].caption.toString()),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 5),
+                                    title: Row(
+                                      children: [
+                                        Expanded(
+                                            child: Text(items[index]
+                                                .caption
+                                                .toString())),
+                                        IconButton(
+                                          icon: const Icon(Icons.more_horiz),
+                                          onPressed: () {
+                                            print("Show more");
+                                          },
+                                        )
+                                      ],
+                                    ),
                                     subtitle: Row(
                                       children: [
                                         Text("${items[index].views}k views"),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 10,
                                         ),
-                                        Text("1 week ago")
+                                        const Text("1 week ago")
                                       ],
                                     ),
                                   ),
@@ -84,20 +99,27 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: [
-                                      Container(
-                                        child: Row(
-                                          children: [
-                                            IconButton(
-                                                onPressed: () {
-                                                  print(
-                                                      "View channel details");
-                                                },
-                                                icon: const Icon(Icons.face)),
-                                            Text(items[index]
-                                                .channelName
-                                                .toString())
-                                          ],
-                                        ),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: CircleAvatar(
+                                              backgroundColor:
+                                                  Colors.cyanAccent,
+                                              child: ClipOval(
+                                                child: Image.asset(
+                                                  items[index].image.toString(),
+                                                  fit: BoxFit.cover,
+                                                  width: 100,
+                                                  height: 100,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(items[index]
+                                              .channelName
+                                              .toString())
+                                        ],
                                       ),
                                       Padding(
                                         padding: EdgeInsets.all(8.0),
@@ -126,41 +148,48 @@ class _HomePageState extends State<HomePage> {
   }
 
   BottomNavigationBar buildBottomNavigationBar() {
-
     int selected = 0;
 
     void _onTapped(int index) {
       setState(() {
         selected = index;
       });
-     // Navigator.push(context, route)
+      // Navigator.push(context, route)
     }
+
     return BottomNavigationBar(
       selectedItemColor: Colors.red,
       currentIndex: selected,
       onTap: _onTapped,
       items: const [
         BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-            ),
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.local_fire_department,color: Colors.black54,),
+          icon: Icon(
+            Icons.local_fire_department,
+            color: Colors.black54,
+          ),
           label: 'Play',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.play_circle,color: Colors.black54,),
+          icon: Icon(
+            Icons.play_circle,
+            color: Colors.black54,
+          ),
           label: 'Play',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.folder,color: Colors.black54,),
+          icon: Icon(
+            Icons.folder,
+            color: Colors.black54,
+          ),
           label: 'Play',
         ),
       ],
       type: BottomNavigationBarType.shifting,
     );
-
-
   }
 
   AppBar header(BuildContext context) {
@@ -175,13 +204,13 @@ class _HomePageState extends State<HomePage> {
           color: Colors.black,
         ),
       ),
-      actions: const [
+      actions:  [
         Padding(
           padding: EdgeInsets.all(8.0),
-          child: Icon(
-            Icons.supervised_user_circle,
-            color: Colors.black,
-          ),
+          child: CircleAvatar(
+            child: ClipOval(
+                child: Image.asset("assets/images/Scoobydoo.jpeg",fit: BoxFit.cover,height: 100,width: 100,)),
+          )
         )
       ],
     );
@@ -194,8 +223,6 @@ class _HomePageState extends State<HomePage> {
 
     return list.map((e) => YouTubeModel.fromJson(e)).toList();
   }
-
-
 }
 
 class MySearchDelegate extends SearchDelegate {
@@ -225,7 +252,9 @@ class MySearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    return VideoApp(asset: 'assets/video.mp4',);
+    return const VideoApp(
+      asset: 'assets/video.mp4',
+    );
   }
 
   @override
